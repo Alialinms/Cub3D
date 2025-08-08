@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/26 16:17:55 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/26 16:35:51 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 05:36:46 by amashhad          #+#    #+#             */
+/*   Updated: 2025/03/01 20:26:27 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,25 @@
 
 char	*ft_strrchr(const char *s, int c)
 {
-	int	i;
-	int	j;
+	size_t			i;
+	unsigned char	ch;
 
-	j = 0;
-	i = 0;
-	while (s[j] != '\0')
-		j++;
-	i = j - 1;
-	while (i >= 0)
+	if (!s)
 	{
-		if (s[i] == (char)c)
-		{
-			return ((char *)(&s[i]));
-		}
+		ft_putendl_fd("(strrchr error, no string)", 2);
+		exit(1);
+	}
+	ch = c;
+	i = ft_strlen(s);
+	if (!ch)
+		return ((char *)(s) + i);
+	while (i > 0)
+	{
+		if (s[i] == ch)
+			return ((char *)(s) + i);
 		i--;
 	}
-	if (c == '\0' || c == 0 || c == 1024)
-		return ((char *)(&s[j]));
+	if (s[0] == ch)
+		return ((char *)(s) + i);
 	return (0);
 }

@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_chr.c                                           :+:      :+:    :+:   */
+/*   ft_putchar.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 14:54:59 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 14:56:18 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/12 22:55:25 by amashhad          #+#    #+#             */
+/*   Updated: 2025/01/11 08:32:10 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_chr(va_list args)
+int	ft_putchar(char c)
 {
-	int		count;
-	char	c;
-
-	count = 1;
-	c = va_arg(args, int);
-	ft_putchar_fd(c, 1);
-	return (count);
+	write(1, &c, 1);
+	return (1);
 }

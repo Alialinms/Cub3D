@@ -3,62 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 16:33:20 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 16:33:39 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/11 05:44:10 by amashhad          #+#    #+#             */
+/*   Updated: 2025/01/17 17:55:13 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_format(char chr, va_list args)
+static int	ft_terminal(va_list args, char func)
 {
 	int	count;
 
 	count = 0;
-	if (chr == 's')
-		count += str(args);
-	else if (chr == 'i' || chr == 'd')
-		count += num(args);
-	else if (chr == 'c')
-		count += ft_chr(args);
-	else if (chr == 'u')
-		count += ft_unsignednum(args);
-	else if (chr == 'p')
-		ft_ptr(args, &count);
-	else if (chr == 'x')
-		itoh(args, (unsigned long)va_arg(args, unsigned int), &count);
-	else if (chr == 'X')
-		itoh_upper(args, (unsigned long)va_arg(args, unsigned int), &count);
-	else if (chr == '%')
-	{
-		count++;
-		ft_putchar_fd('%', 1);
-	}
+	if (func == 'c')
+		count += ft_putchar(va_arg(args, int));
+	else if (func == 's')
+		count += ft_putstr(va_arg(args, char *));
+	else if (func == 'd' || func == 'i')
+		count += ft_putnbr(va_arg(args, int));
+	else if (func == 'u')
+		count += ft_putuns(va_arg(args, unsigned int));
+	else if (func == 'x' || func == 'X')
+		count += ft_putitox(va_arg(args, unsigned int), func);
+	else if (func == 'p')
+		count += ft_putvoid(va_arg(args, void *));
+	else if (func == '%')
+		count += write (1, "%", 1);
 	return (count);
 }
 
-int	ft_printf(const char *str, ...)
+int	ft_printf(const char *func, ...)
 {
 	va_list	args;
+	int		i;
 	int		count;
 
+	va_start(args, func);
 	count = 0;
-	va_start(args, str);
-	while (*str)
+	i = 0;
+	while (func[i])
 	{
-		if (*str == '%')
+		if (func[i] == '%' && ft_strchr("csdiuxXp%", (func[i + 1])))
 		{
-			str++;
-			count += ft_format(*str, args);
+			i++;
+			count += ft_terminal(args, func[i]);
 		}
 		else
-		{
-			ft_putchar_fd(*str, 1);
-			count++;
-		}
-		str++;
+			count += ft_putchar(func[i]);
+		i++;
 	}
 	va_end(args);
 	return (count);

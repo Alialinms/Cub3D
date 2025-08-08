@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str.c                                           :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 14:48:17 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 14:52:03 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/10 01:10:36 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/10 01:16:16 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	str(va_list args)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	char	*str;
-	int		count;
-
-	str = va_arg(args, char *);
-	count = 0 ;
-	if (!str)
+	while (lst)
 	{
-		write(1, "(null)", 6);
-		return (6);
+		f(lst -> content);
+		lst = lst -> next;
 	}
-	count = ft_strlen(str);
-	ft_putstr_fd(str, 1);
-	return (count);
 }

@@ -3,41 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 16:47:22 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/28 16:49:31 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 04:39:16 by amashhad          #+#    #+#             */
+/*   Updated: 2025/03/01 20:18:06 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-//#include <stdio.h>
-//#include <string.h>
 #include "libft.h"
 
-char	*ft_strdup(const char *src1)
+char	*ft_strdup(const char *s)
 {
-	int		i;
-	char	*dest;
-	char	*src;
+	char	*dup;
+	size_t	i;
 
-	src = (char *)src1;
-	i = 0;
-	dest = (char *)malloc(ft_strlen(src) * sizeof(char) + 1);
-	if (!dest)
-		return (0);
-	while (src[i])
+	if (!s)
 	{
-		dest[i] = src[i];
+		ft_putendl_fd("(strdup error no string)", 2);
+		return (NULL);
+	}
+	i = ft_strlen(s);
+	dup = ft_calloc(i + 1, sizeof(char ));
+	if (!dup)
+		return (0);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		dup[i] = s[i];
 		i++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	dup[i] = '\0';
+	return (dup);
 }
-/*int main(void)
-{
-	char *src = "ddd\0ddd";
-	printf("%s \n" , ft_strdup(src));
-	printf("%s \n" , strdup(src));
-	return (0);
-}*/

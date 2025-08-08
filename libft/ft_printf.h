@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 15:45:30 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 15:45:39 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/18 09:33:02 by amashhad          #+#    #+#             */
+/*   Updated: 2025/01/17 17:52:29 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <unistd.h>
 # include <stdarg.h>
-# include <stddef.h>
-# include <stdlib.h>
+# include <unistd.h>
+# include <limits.h>
 # include "libft.h"
 
-char	*ft_unsigneditoa(unsigned int n);
-void	itoh(va_list args, unsigned long p, int *count);
-void	itoh_upper(va_list args, unsigned long p, int *count);
-void	ft_ptr(va_list args, int *count);
-int		str(va_list args);
-int		ft_chr(va_list args);
-int		num(va_list args);
-int		ft_printf(const char *str, ...);
-int		ft_unsignednum(va_list args);
+int		ft_putchar(char c);
+int		ft_putitox(unsigned int nb, char size);
+int		ft_putnbr(int nb);
+int		ft_putstr(char *s);
+int		ft_putuns(unsigned int nb);
+int		ft_putvoid(void *v);
+char	*ft_strchr(const char *s, int c);
+size_t	ft_strlen(const char *s);
+int		ft_printf(const char *func, ...);
 
 #endif

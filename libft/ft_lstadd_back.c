@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoh.c                                          :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 14:57:15 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 14:58:54 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/10 01:08:42 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/10 01:25:58 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	itoh(va_list args, unsigned long p, int *count)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	char	*base;
+	t_list	*last;
 
-	base = "0123456789abcdef";
-	while (p >= 16)
+	if (!new)
+		return ;
+	if (!*lst)
 	{
-		itoh(args, p / 16, count);
-		break ;
+		*lst = new;
+		return ;
 	}
-	ft_putchar_fd(base[p % 16], 1);
-	(*count)++;
+	last = ft_lstlast(*lst);
+	last -> next = new;
 }

@@ -3,28 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 20:59:52 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/28 20:59:59 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 03:01:51 by amashhad          #+#    #+#             */
+/*   Updated: 2025/05/11 18:29:03 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <strings.h>
-#include <stdio.h>
 #include "libft.h"
 
-void	*ft_bzero(void *s, size_t n)
+void	ft_bzero(void *s, size_t n)
 {
-	unsigned char	*p;
 	size_t			i;
+	unsigned char	*ptr;
 
-	p = s;
+	if (!s)
+	{
+		perror("Bzero Error, no String found\n");
+		return ;
+	}
+	ptr = s;
 	i = 0;
 	while (i < n)
 	{
-		p[i] = 0;
+		ptr[i] = 0;
 		i++;
 	}
-	return (p);
 }

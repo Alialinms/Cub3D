@@ -3,41 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 15:14:25 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/27 16:50:22 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 04:13:16 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/10 05:35:55 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
-//#include <string.h>
 #include "libft.h"
 
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t				i;
-	unsigned char		*s11;
-	unsigned char		*s22;
+	const unsigned char	*t1;
+	const unsigned char	*t2;
+	int					counter;
 
-	s11 = (unsigned char *)s1;
-	s22 = (unsigned char *)s2;
+	t1 = s1;
+	t2 = s2;
 	i = 0;
-	while (i < n)
+	counter = 0;
+	if (n == 0)
+		return (0);
+	while (t1[i] == t2[i] && i < n - 1)
 	{
-		if (s11[i] > s22[i])
-			return (s11[i] - s22[i]);
-		if (s11[i] < s22[i])
-			return (s11[i] - s22[i]);
 		i++;
 	}
-	return (0);
+	counter = t1[i] - t2[i];
+	return (counter);
 }
-/*int	main(void)
-{
-	char s1[] = "ali" ;
-	char s2[] = "alz";
-	printf("%i \n", ft_memcmp(s1, s2, 4));
-	printf("%i \n", memcmp(s1, s2, 4));
-	return (0);
-}*/

@@ -3,33 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/06 14:07:51 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/06 14:08:18 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/09 21:10:33 by amashhad          #+#    #+#             */
+/*   Updated: 2025/03/01 20:18:48 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "libft.h"
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	int	i;
-
-	i = 0;
 	if (!s)
 	{
-		return ;
+		ft_putendl_fd("(putstr err, no str)", fd);
+		exit(2);
 	}
-	while (s[i] != '\0')
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
+	write(fd, s, ft_strlen(s));
 }
-// int main(void)
-// {
-//     char *s = 3;
-//     ft_putstr_fd(s, 1);
-// }

@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_num.c                                           :+:      :+:    :+:   */
+/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 14:52:17 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 14:54:34 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/10 01:09:20 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/10 01:20:27 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	num(va_list args)
+t_list	*ft_lstnew(void *content)
 {
-	char	*str;
-	int		count;
-	int		n;
+	t_list	*lst;
 
-	count = 0;
-	n = va_arg(args, int);
-	str = ft_itoa(n);
-	count += ft_strlen(str);
-	ft_putstr_fd(str, 1);
-	free(str);
-	return (count);
+	lst = malloc(sizeof(t_list));
+	if (!lst)
+		return (NULL);
+	lst -> content = content;
+	lst -> next = NULL;
+	return (lst);
 }

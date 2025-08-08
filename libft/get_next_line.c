@@ -3,121 +3,108 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 19:42:21 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/10/18 19:42:26 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/11/20 17:11:46 by amashhad          #+#    #+#             */
+/*   Updated: 2025/05/03 04:00:02 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft.h"
 
-int	is_there_line(char *s)
+char	*ft_free_gnl(char **str)
 {
-	unsigned int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == '\n')
-		{	
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-char	*find_new_line(char *str)
-{
-	char	*line;
-	int		i;
-
-	i = 0;
-	if (!str[i])
-		return (NULL);
-	while (str[i] != '\n' && str[i])
-		i++;
-	line = malloc((sizeof(char) * i) + 2);
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (str[i] != '\n' && str[i])
-	{
-		line[i] = str[i];
-		i++;
-	}
-	if (str[i] && str[i] == '\n')
-		line[i] = '\n';
-	else
-		line[i] = '\0';
-	line[i + 1] = '\0';
-	return (line);
-}
-
-char	*find_line(char **string, char **line, ssize_t *j, int fd)
-{
-	if (is_there_line(string[fd]) && *j != 0)
-	{
-		*line = find_new_line(string[fd]);
-		string[fd] = ft_substred(string[fd], ft_strchred(string[fd], '\n'),
-				ft_strlen(string[fd]));
-	}
-	if (string[fd][0] == '\0')
-	{
-		free(string[fd]);
-		string[fd] = NULL;
-	}
-	return (*line);
-}
-
-char	*get_string(char **string, char **line, char *buf, ssize_t *j)
-{
-	if (!(*string))
-		*string = ft_calloc(1, sizeof(char));
-	if (*j == 0 && (*string)[0])
-	{
-		*line = find_new_line(*string);
-		if (is_there_line(*string))
-		{
-			*string = ft_substred(*string, ft_strchred(*string, '\n'),
-					ft_strlen(*string));
-		}
-		else
-			(*string)[0] = '\0';
-		return (*line);
-	}
-	else if (*j == 0)
-		return (NULL);
-	*string = ft_strjoined(*string, buf);
+	free(*str);
+	*str = NULL;
 	return (NULL);
+}
+
+char	*clean_storage(char *line)
+{
+	char	*new_line;
+	char	*ptr;
+	int		len;
+
+	ptr = ft_strchr_gnl(line, '\n');
+	if (!ptr)
+	{
+		new_line = NULL;
+		ft_free_gnl(&line);
+		return (NULL);
+	}
+	else
+		len = (ptr - line) + 1;
+	if (!line[len])
+	{
+		ft_free_gnl(&line);
+		return (NULL);
+	}
+	new_line = ft_substr_gnl(line, len, ft_strlen(line) - len);
+	ft_free_gnl(&line);
+	if (!new_line)
+		return (NULL);
+	return (new_line);
+}
+
+char	*new_buf(char *line)
+{
+	char	*buf;
+	char	*ptr;
+	int		len;
+
+	ptr = ft_strchr_gnl(line, '\n');
+	len = (ptr - line) + 1;
+	buf = ft_substr_gnl(line, 0, len);
+	if (!buf)
+		return (NULL);
+	return (buf);
+}
+
+char	*readbuf(int fd, char *line)
+{
+	int		byte;
+	char	*buffer;
+
+	byte = 1;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (ft_free_gnl(&line));
+	buffer[0] = '\0';
+	while (byte > 0 && !ft_strchr_gnl(buffer, '\n'))
+	{
+		byte = read (fd, buffer, BUFFER_SIZE);
+		if (byte > 0)
+		{
+			buffer[byte] = '\0';
+			line = ft_strjoin_gnl(line, buffer);
+		}
+	}
+	free(buffer);
+	if (byte == -1)
+	{
+		ft_free_gnl(&line);
+		return (NULL);
+	}
+	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*string[MAXFD];
+	static char	*line[FD_SIZE] = {NULL};
 	char		*buf;
-	char		*line;
-	ssize_t		j;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0)
 		return (NULL);
-	buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if ((line[fd] && !ft_strchr_gnl(line[fd], '\n')) || !line[fd])
+		line[fd] = readbuf (fd, line[fd]);
+	if (!line[fd])
+		return (NULL);
+	buf = new_buf(line[fd]);
 	if (!buf)
-		return (NULL);
-	j = read(fd, buf, BUFFER_SIZE);
-	if (j < 0)
 	{
-		if (string[fd])
-			free(string[fd]);
-		return (free(buf), string[fd] = NULL, NULL);
+		ft_free_gnl(&line[fd]);
+		return (NULL);
 	}
-	buf[j] = 0;
-	line = get_string(&string[fd], &line, buf, &j);
-	free(buf);
-	if (!(is_there_line(string[fd])) && j != 0)
-		return (line = get_next_line(fd), line);
-	line = find_line(string, &line, &j, fd);
-	return (line);
+	line[fd] = clean_storage(line[fd]);
+	return (buf);
 }

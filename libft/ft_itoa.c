@@ -3,97 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/06 13:58:31 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/06 14:28:25 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/05 20:12:45 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/13 01:27:27 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <stdio.h>
-#include <stdlib.h>
 #include "libft.h"
 
-static int	size(int n, int i)
-
+static	char	*ft_conversion(long int n, char *number, int sign, size_t size)
 {
-	int	div;
+	size_t	ssize;
+	size_t	i;
 
-	div = 1;
-	while (n / div >= 10)
-		div = div * 10;
-	while (div > 0)
+	ssize = size;
+	i = 0;
+	if (sign == 1)
 	{
+		i = 1;
+		number[0] = '-';
+		size = size + 1;
+	}
+	while (i < size)
+	{
+		number [size - 1] = (n % 10) + '0';
+		n = n / 10;
+		size--;
+	}
+	if (sign == 1)
+		number[ssize + 1] = '\0';
+	else
+		number[ssize] = '\0';
+	return (number);
+}
+
+static	size_t	ft_sizecheck(long int n)
+{
+	size_t	i;
+	size_t	numb;
+
+	i = 0;
+	numb = n;
+	while (numb > 0)
+	{
+		numb = numb / 10;
 		i++;
-		n = n % div;
-		div = div / 10;
 	}
 	return (i);
 }
 
-static void	big_num(char *str, int n, int i)
-{
-	int	div;
-	int	result;
-
-	div = 1;
-	while (n / div >= 10)
-		div = div * 10;
-	while (div > 0)
-	{
-		result = (n / div) + '0';
-		str[i] = result;
-		i++;
-		n = n % div;
-		div = div / 10;
-	}
-}
-
-static void	print_num(char *str, int n)
-{
-	int	i;
-
-	i = 0;
-	if (n == -2147483648)
-	{
-		str[i] = '-';
-		i++;
-		str[i] = '2';
-		i++;
-		n = 147483648;
-	}
-	if (n < 0)
-	{
-		str[i] = '-';
-		i++;
-		n = -1 * n;
-	}
-	big_num(str, n, i);
-}
-
 char	*ft_itoa(int n)
 {
-	char	*str;
-	int		i;
-	int		nb;
+	long int	num;
+	char		*number;
+	int			sign;
+	size_t		size;
 
-	i = 0;
-	nb = n;
-	if (nb == -2147483648)
+	num = n;
+	sign = 0;
+	if (num == 0)
 	{
-		i = 2;
-		nb = 147483648;
+		number = ft_strdup("0");
+		return (number);
 	}
-	if (nb < 0)
+	if (num > 0)
+		sign = 0;
+	else
 	{
-		i++;
-		nb = -1 * nb;
+		sign = 1;
+		num = -num;
 	}
-	i = size(nb, i);
-	str = (char *)malloc((i + 1) * sizeof(char));
-	if (!str)
+	size = ft_sizecheck(num);
+	number = malloc(sizeof(char) * size + 1 + sign);
+	if (!number)
 		return (NULL);
-	print_num(str, n);
-	str[i] = '\0';
-	return (str);
+	number = ft_conversion(num, number, sign, size);
+	return (number);
 }

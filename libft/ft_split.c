@@ -3,118 +3,119 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/30 11:15:36 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/30 11:33:00 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/09 20:24:14 by amashhad          #+#    #+#             */
+/*   Updated: 2025/04/26 08:24:38 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "libft.h"
 
-static int	sep(const char *s, char c)
+static int	ft_wordcount0(const char *s, char c)
 {
-	if (*s == c)
-		return (1);
-	return (0);
+	int	words;
+	int	i;
+
+	words = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (i == 0 && s[i] != c)
+			words++;
+		if (i > 0 && s[i] != c && s[i - 1] == c)
+			words++;
+		i++;
+	}
+	return (words);
 }
 
-static int	words_count(const char *s, char c)
+static char	**ft_mallocfinal(char **string, const char *s, char c)
 {
 	int	count;
-	int	word;
+	int	i;
+	int	x;
 
 	count = 0;
-	word = 0;
-	while (*s)
+	i = 0;
+	x = 0;
+	while (s[i])
 	{
-		if (!sep(s, c) && !word)
-		{
-			word = 1;
+		if (s[i] != c)
 			count++;
+		if ((s[i] == c && i > 0 && s[i - 1] != c)
+			|| (s[i] != c && s[i + 1] == '\0'))
+		{
+			string[x] = (char *)malloc(sizeof(char) * (count + 1));
+			if (!string[x])
+				return (NULL);
+			count = 0;
+			x++;
 		}
-		else if (sep(s, c))
-			word = 0;
-		s++;
+		i++;
 	}
-	return (count);
+	return (string);
 }
 
-static void	ft_free(char **array, int count)
+static char	**ft_wordcpy(char **string, const char *s, char c)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	x = 0;
+	y = 0;
+	while (s[i])
+	{
+		if (s[i] != c)
+			string[x][y++] = s[i];
+		if (s[i] != c && s[i + 1] == '\0')
+			string[x][y] = '\0';
+		if (s[i] == c && i > 0 && s[i - 1] != c)
+		{
+			string[x][y] = '\0';
+			x++;
+			y = 0;
+		}
+		i++;
+	}
+	return (string);
+}
+
+static char	**ft_free(char **string)
 {
 	int	i;
 
 	i = 0;
-	while (i < count)
+	while (string[i])
 	{
-		free(array[i]);
+		free(string[i]);
+		string[i] = NULL;
 		i++;
 	}
+	free(string);
+	return (NULL);
 }
 
-static int	copy(const char *s, char c, char **array, int count)
+char	**ft_split(char *s, char c)
 {
-	int	len;
-	int	j;
+	char	**string;
+	int		wordcount;
 
-	len = 0;
-	while (!sep(s + len, c) && s[len] != '\0')
-	{
-		len++;
-	}
-	array[count] = (char *)malloc((len +1) * sizeof(char));
-	if (!array[count])
-	{
-		ft_free(array, count);
-		free(array);
-		return (0);
-	}
-	j = 0;
-	while (j < len)
-	{
-		array[count][j] = s[j];
-		j++;
-	}
-	array[count][j] = '\0';
-	return (1);
-}
-
-char	**ft_split(char const *s1, char c)
-{
-	char	**array;
-	int		count;
-	int		flag;
-
-	count = 0;
-	flag = 1;
-	array = (char **)ft_calloc((words_count(s1, c) + 1), sizeof(char *));
-	if (!array)
+	if (!s)
 		return (NULL);
-	while (*s1)
+	wordcount = ft_wordcount0(s, c);
+	string = (char **)malloc(sizeof(*string) * (wordcount + 1));
+	if (!string)
+		return (NULL);
+	string = ft_mallocfinal(string, s, c);
+	if (!string)
+		ft_free(string);
+	else
 	{
-		if (flag == 1 && !sep(s1, c))
-		{
-			if (!copy(s1, c, array, count++))
-				return (NULL);
-			flag = 0;
-		}
-		if (sep(s1++, c))
-			flag = 1;
+		ft_wordcpy(string, s, c);
+		string[wordcount] = NULL;
 	}
-	return (array);
+	return (string);
 }
-/*int main() {
-    // Write C code here
-    char *s = "hello!";
-     char c = ' ';
-     char **a = ft_split(s, c);
-     int i = 0;
-     while (a[i])
-     {
-        printf("%s\n" ,a[i]);
-        i++;
-     }
-
-    return 0;
-}*/

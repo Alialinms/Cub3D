@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/26 17:07:58 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/27 13:47:01 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 06:08:46 by amashhad          #+#    #+#             */
+/*   Updated: 2025/05/23 09:13:35 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,23 @@
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
 	size_t	i;
-	size_t	j;
+	size_t	c;
 
 	i = 0;
-	if (little[0] == '\0')
-	{
-		return ((char *)(big));
-	}
+	if (!big)
+		return (NULL);
+	if (!*little)
+		return ((char *)big);
 	if (len == 0)
 		return (NULL);
-	while (big[i] != '\0' && (i < len - 1 || len == 1))
+	while (i < len && big[i])
 	{
-		j = 0;
-		while (big[i + j] == little[j] && (i + j) < len)
-		{
-			if (little[j + 1] == '\0')
-			{
-				return ((char *)(big + i));
-			}
-			j++;
-		}
+		c = 0;
+		while (big[i + c] == little[c] && (i + c) < len && big[i + c])
+			c++;
+		if (little[c] == '\0')
+			return ((char *)(big + i));
 		i++;
 	}
-	return (NULL);
+	return (0);
 }

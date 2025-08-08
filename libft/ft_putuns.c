@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unsignednum.c                                   :+:      :+:    :+:   */
+/*   ft_putuns.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/20 16:28:05 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/20 16:28:13 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/18 09:33:58 by amashhad          #+#    #+#             */
+/*   Updated: 2025/01/11 08:32:26 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_unsignednum(va_list args)
+int	ft_putuns(unsigned int nb)
 {
-	unsigned int	n;
-	char			*str;
-	int				count;
+	int	count;
 
 	count = 0;
-	n = va_arg(args, unsigned int);
-	str = ft_unsigneditoa(n);
-	count += ft_strlen(str);
-	ft_putstr_fd(str, 1);
-	free(str);
+	if (nb >= 10)
+	{
+		count += ft_putuns(nb / 10);
+		nb = nb % 10;
+	}
+	if (nb < 10)
+	{
+		count += ft_putchar(nb + 48);
+	}
 	return (count);
 }

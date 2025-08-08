@@ -3,39 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 16:51:36 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/27 17:10:00 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 04:18:00 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/05 00:39:37 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <string.h>
-//#include <stdio.h>
 #include "libft.h"
 
-void	*ft_memchr(const void *s1, int c, size_t n)
+void	*ft_memchr(const void *s, int c, size_t n)
 {
-	char	*s;
-	size_t	i;
+	size_t			i;
+	unsigned char	x;
 
+	x = c;
 	i = 0;
-	s = (char *)(s1);
 	while (i < n)
 	{
-		if (s[i] == (char)c)
-			return ((char *)(&s[i]));
+		if (((unsigned char *)s)[i] == x)
+		{
+			return ((unsigned char *)s + i);
+		}
 		i++;
 	}
 	return (NULL);
 }
-/*int	main()
-{
-	char *s = "ali";
-	char c = '\0';
-	char *d = ft_memchr(s, c, 4);
-	printf("%s \n", d);
-	char *d1 = ft_memchr(s, c, 4);
-	 printf("%s \n", d1);
-	 return (0);
-}*/

@@ -17,29 +17,14 @@ typedef struct s_map
 	int			floor_red;
     int         floor_blue;
     int         floor_green;
-    int			ciling_red;
-    int         ciling_blue;
-    int         ciling_green;
-	int			players;
+    int			ceiling_red;
+    int         ceiling_blue;
+    int         ceiling_green;
+	int			player;
+	int			out_border;
 }				t_map;
 
-void	ft_farray(char	**arr)
-{
-	int		i;
 
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr && arr[i])
-	{
-		free(arr[i]);
-		arr[i] = NULL;
-		i++;
-	}
-	free(arr);
-	arr = NULL;
-	return ;
-}
 
 int	ft_atoi(const char *str)
 {
@@ -58,15 +43,6 @@ int	ft_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 		result = (result * 10) + (str[i++] - '0');
 	return (result * sign);
-}
-
-void	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		write(2, &str[i++], 1);
 }
 
 int	is_digit(char	*str)
@@ -115,15 +91,16 @@ void    init_map(t_map *map)
     map->int_NO = 0;
     map->int_SO = 0;
     map->int_WE = 0;
-    map->ciling_blue = -1;
-    map->ciling_red = -1;
-    map->ciling_green = -1;
+    map->ceiling_blue = -1;
+    map->ceiling_red = -1;
+    map->ceiling_green = -1;
     map->floor_blue = -1;
     map->floor_green = -1;
     map->floor_red = -1;
-    map->players = 0;
+    map->player = 0;
     map->cols = 0;
     map->rows = 0;
+	map->out_border = 0;
 }
 
 void    map_error(t_map *map)
@@ -169,9 +146,28 @@ void    fill_color_of_floor(t_map *map, char **log)
 
 void    fill_color_of_ciling(t_map *map, char **log)
 {
-    map->ciling_red = ft_atoi(log[0]);
-    map->ciling_green = ft_atoi(log[1]);
-    map->ciling_blue = ft_atoi(log[2]);
+    map->ceiling_red = ft_atoi(log[0]);
+    map->ceiling_green = ft_atoi(log[1]);
+    map->ceiling_blue = ft_atoi(log[2]);
+}
+
+int	skip_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	if (!line)
+		return (-1);
+	while (!ft_isspace(line[i]))
+		i++;
+	while (line[i] != '\0')
+	{
+		while (ft_isspace(line[i]))
+			i++;
+		if (line[i] != '\0')
+			return (i);
+	}
+	return (-1);
 }
 
 int check_form(t_map *map, char *line)
@@ -181,33 +177,43 @@ int check_form(t_map *map, char *line)
 
     log = NULL;
     error = 0;
-    if (line[0] == 'N' && line[1] == 'O' && line[2] == ' ' && map->int_NO == 0)
+    if (line[0] == 'N' && line[1] == 'O' && line[2] == ' ' && map->int_NO == 0 && map->out_border == 0)
     {
-        map->img_NO = ft_strdup(line + 3);
+		if (skip_space(line) == -1)
+			return (1);
+        map->img_NO = ft_strdup(line + skip_space(line));
         map->int_NO = 1;
         error = 1; 
     }
-    if (line[0] == 'S' && line[1] == 'O' && line[2] == ' ' && map->int_SO == 0)
+    if (line[0] == 'S' && line[1] == 'O' && line[2] == ' ' && map->int_SO == 0 && map->out_border == 0)
     {
-        map->img_SO = ft_strdup(line + 3);
+		if (skip_space(line) == -1)
+			return (1);
+        map->img_SO = ft_strdup(line + skip_space(line));
         map->int_SO = 1;
         error = 1; 
     }
-    if (line[0] == 'W' && line[1] == 'E' && line[2] == ' ' && map->int_WE == 0)
+    if (line[0] == 'W' && line[1] == 'E' && line[2] == ' ' && map->int_WE == 0 && map->out_border == 0)
     {
-        map->img_WE = ft_strdup(line + 3);
+		if (skip_space(line) == -1)
+			return (1);
+        map->img_WE = ft_strdup(line + skip_space(line));
         map->int_WE = 1;
         error = 1; 
     }
-    if (line[0] == 'E' && line[1] == 'A' && line[2] == ' ' && map->int_EA == 0)
+    if (line[0] == 'E' && line[1] == 'A' && line[2] == ' ' && map->int_EA == 0 && map->out_border == 0)
     {
-        map->img_EA = ft_strdup(line + 3);
+		if (skip_space(line) == -1)
+			return (1);
+        map->img_EA = ft_strdup(line + skip_space(line));
         map->int_EA = 1;
         error = 1; 
     }
-    if (line[0] == 'F' && line[1] == ' ' && map->floor_red == -1)
+    if (line[0] == 'F' && line[1] == ' ' && map->floor_red == -1 && map->out_border == 0)
     {
-        log = ft_split(line + 2, ',');
+		if (skip_space(line) == -1)
+			return (1);
+        log = ft_split(line + skip_space(line), ',');
         if (!log)
             return (1);
         if (is_number(log))
@@ -216,17 +222,24 @@ int check_form(t_map *map, char *line)
         error = 1;
         ft_farray(log);
     }
-    if (line[0] == 'C' && line[1] == ' ' && map->ciling_red == -1)
+    if (line[0] == 'C' && line[1] == ' ' && map->ceiling_red == -1 && map->out_border == 0)
     {
-        log = ft_split(line + 2, ',');
+		if (skip_space(line) == -1)
+			return (1);
+        log = ft_split(line + skip_space(line), ',');
         if (is_number(log))
-            return (1);
+			return (1);
         fill_color_of_ciling(map, log);
         error = 1; 
+		ft_farray(log);
     }
     if (line[0] == '1' && line[ft_strlen(line) - 1] == '1')
+	{
+		map->rows++;
+		map->out_border = 1;
         error = 1;
-    if (error == 0 && line[0] != '\0')
+	}
+    if ((error == 0 && line[0] != '\0') || (error == 0 && map->out_border == 1))
         return (1);
     return (0);
 }
@@ -250,41 +263,132 @@ void	map_read(char *file, t_map *map)
             line[ft_strlen(line) - 1] = '\0';
         if (check_form(map, line))
             map_error(map);
-		map->rows++;
 		free(line);
 		i++;
 	}
 	close(fd);
 }
 
-// void	map_save(char *file, t_map *map)
-// {
-// 	int		fd;
-// 	int		i;
-// 	char	*line;
+void	continue_save(int fd, t_map *map)
+{
+	char	*line;
+	int		i;
 
-// 	fd = open(file, O_RDONLY);
-// 	if (fd == -1)
-// 		map_error(map, 1);
-// 	map->arr_map = (char **)malloc(game->map.rows * sizeof(char *));
-// 	if (!game->map.map)
-// 		map_error(game->map, 1);
-// 	i = 0;
-// 	while (1)
-// 	{
-// 		line = get_next_line(fd);
-// 		if (line == NULL)
-// 			break ;
-// 		if (line[ft_strlen(line) - 1] == '\n')
-// 			line[ft_strlen(line) - 1] = '\0';
-// 		game->map.map[i] = ft_strdup(line);
-// 		free(line);
-// 		if (!game->map.map[i])
-// 			map_error(game->map, 9);
-// 		i++;
-// 	}
-// 	close(fd);
-// }
+	i = 0;
+	line = NULL;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
+		if (line[0] == '1')
+		{
+			map->arr_map[i] = ft_strdup(line);
+			free(line);
+			if (!map->arr_map[i])
+				map_error(map);
+			i++;
+		}
+		else
+			free(line);
+	}
+	map->arr_map[i] = NULL;
+}
+
+void	map_save(char *file, t_map *map)
+{
+	int		fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		map_error(map);
+	map->arr_map = (char **)malloc((map->rows + 1) * sizeof(char *));
+	if (!map->arr_map)
+		map_error(map);
+	continue_save(fd, map);
+	close(fd);
+}
+
+int	if_not_one(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] != '1')
+		{
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	search(char *str, t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == 'N')
+			map->player++;
+		if (ft_isspace(str[i]))
+			str[i] = '0';
+		if (str[i] != '1' && str[i] != '0' && str[i] != 'N')
+			map_error(map);
+		i++;
+	}
+}
+
+int	many_players(t_map *map)
+{
+	int	i;
+
+	i = 1;
+	while (i < map->rows - 1)
+	{
+		search(map->arr_map[i], map);
+		i++;
+	}
+	if (map->player == 1)
+		return (0);
+	else
+		return (1);
+}
+
+int	road_without_a_wall(char **arr, t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (i < map->rows - 1)
+	{
+		j= 0;
+		while (arr[i][j] != '\0')
+		{
+			while (arr[i][j] != '1')
+			{
+				if (arr[i - 1][j] == '\0' || arr[i + 1][j] == '\0')
+					return (1);
+				j++;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	map_check(t_map *map)
+{
+	if (if_not_one(map->arr_map[0]) || if_not_one(map->arr_map[map->rows - 1]) || many_players(map) || road_without_a_wall(map->arr_map, map))
+		map_error(map);
+}
 
 // static void	check_args(int argc, char **argv)
 // {
@@ -328,8 +432,12 @@ int	main(void)
 	// check_args(argc, argv);
 	init_map(map);
 	map_read("test.cub", map);
-    ft_printf("succuse\n");
-	// map_save(argv[1], map);
-	// map_check(map);
+    ft_printf("success\n");
+	map_save("test.cub", map);
+	// ft_printf("%s\n", map->arr_map[0]);
+	// ft_printf("%s\n", map->arr_map[map->rows - 1]);
+	map_check(map);
+	ft_printarr(map->arr_map);
+	//map_error(map);
 	return (0);
 }

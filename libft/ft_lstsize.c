@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ptr.c                                           :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 15:02:28 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 15:04:53 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/10 01:09:51 by amashhad          #+#    #+#             */
+/*   Updated: 2025/03/01 20:11:38 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_ptr(va_list args, int *count)
+int	ft_lstsize(t_list *lst)
 {
-	unsigned long	p;
+	int	size;
 
-	p = (unsigned long)(va_arg(args, void *));
-	if (!p)
+	size = 0;
+	while (lst)
 	{
-		write(1, "(nil)", 5);
-		*count += 5;
-		return ;
+		lst = lst->next;
+		size++;
 	}
-	ft_putstr_fd("0x", 1);
-	*count += 2;
-	itoh(args, p, count);
+	return (size);
 }

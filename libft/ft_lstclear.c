@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoh_upper.c                                    :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 14:59:25 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/13 15:01:48 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/10 01:09:34 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/10 02:22:08 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	itoh_upper(va_list args, unsigned long p, int *count)
+void	ft_lstclear(t_list **lst, void (*del)(void	*))
 {
-	char	*base;
+	t_list	*tmp;
 
-	base = "0123456789ABCDEF";
-	while (p >= 16)
+	while (*lst)
 	{
-		itoh_upper(args, p / 16, count);
-		break ;
+		tmp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = tmp;
 	}
-	ft_putchar_fd(base[p % 16], 1);
-	(*count)++;
 }

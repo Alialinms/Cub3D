@@ -3,44 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 16:55:04 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/08/28 16:55:11 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/08/29 03:21:09 by amashhad          #+#    #+#             */
+/*   Updated: 2024/09/05 00:32:02 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <string.h>
-//#include <stdio.h>
 #include "libft.h"
 
-void	*ft_memcpy(void *dst, const void *src, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
 	size_t	i;
-	char	*pdst;
-	char	*psrc;
 
 	i = 0;
-	pdst = (char *) dst;
-	psrc = (char *) src;
-	if (!dst && !src)
-	{
-		return (NULL);
-	}
+	if (((unsigned char *)dest == NULL) && ((unsigned char *)src == NULL))
+		return (0);
 	while (i < n)
 	{
-		pdst[i] = psrc[i];
+		((unsigned char *)dest)[i] = ((unsigned char *)src)[i];
 		i++;
 	}
-	return (pdst);
+	return ((unsigned char *)dest);
 }
-/*int main(void)
-{
-	char s[] = "ali hasan";
-	printf("%s \n", s);
-	ft_memcpy(s + 2, s, 5);
-	printf("%s \n", s);
-	memmove(s + 4, s, 3);
-	printf("%s \n", s);
-	return (0);
-}*/

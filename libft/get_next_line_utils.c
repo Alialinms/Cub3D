@@ -3,77 +3,100 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 19:44:22 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/10/18 19:44:27 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/11/09 07:11:56 by amashhad          #+#    #+#             */
+/*   Updated: 2025/01/07 03:13:13 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft.h"
 
-char	*ft_strjoined(char *s1, char *s2)
+size_t	ft_strlen_gnl(const char *s)
 {
-	char	*jstr;
-	int		i;
-	int		j;
+	size_t	i;
 
 	i = 0;
-	j = 0;
-	if (!s1 || !s2)
+	if (!s)
+		return (0);
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strchr_gnl(const char *s, int c)
+{
+	while (*s != (unsigned char)c)
+		if (!*s++)
+			return (NULL);
+	return ((char *)s);
+}
+
+char	*ft_substr_gnl(char const *s, unsigned int start, size_t len)
+{
+	char	*res;
+	char	*src;
+	size_t	reslen;
+
+	if (!s)
 		return (NULL);
-	jstr = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!jstr)
+	if (ft_strlen(s) < (size_t)start)
 		return (NULL);
-	while (s1[i])
+	src = (char *)s + start;
+	if (ft_strlen(src) < len)
+		reslen = ft_strlen(src) + 1;
+	else
+		reslen = len + 1;
+	res = malloc(reslen * sizeof(char));
+	if (!res)
+		return (NULL);
+	ft_strlcpy_gnl(res, src, reslen);
+	return (res);
+}
+
+size_t	ft_strlcpy_gnl(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (size == 0)
+		return (ft_strlen(src));
+	while (src[i] != '\0' && i < size - 1)
 	{
-		jstr[i] = s1[i];
+		dst[i] = src[i];
 		i++;
 	}
-	while (s2[j])
-	{
-		jstr[i] = s2[j];
+	dst[i] = '\0';
+	while (src[i] != '\0')
 		i++;
-		j++;
+	return (i);
+}
+
+char	*ft_strjoin_gnl(char *s1, char *s2)
+{
+	char	*str;
+	size_t	i;
+	size_t	c;
+
+	if (!s1)
+	{
+		s1 = malloc(sizeof(char) + 1);
+		if (!s1)
+			return (NULL);
+		s1[0] = 0;
 	}
-	jstr[i] = '\0';
+	str = (char *)malloc(sizeof(char) * ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!str)
+	{
+		return (ft_free_gnl(&s1));
+	}
+	i = -1;
+	while (s1[++i])
+		str[i] = s1[i];
+	c = -1;
+	while (s2[++c])
+		str[i + c] = s2[c];
+	str[i + c] = '\0';
 	free(s1);
-	return (jstr);
-}
-
-char	*ft_substred(char *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	int		i;
-
-	sub = (char *)malloc((len - start + 1) * sizeof(char));
-	if (!sub)
-		return (NULL);
-	i = 0;
-	while (start < len)
-	{
-		sub[i] = s[start + 1];
-		start++;
-		i++;
-	}
-	sub[i] = '\0';
-	free(s);
-	return (sub);
-}
-
-int	ft_strchred(char *s, int c)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char)c)
-		{
-			return ((i));
-		}
-		i++;
-	}
-	return (0);
+	return (str);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alhamdan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: amashhad <amashhad@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/06 14:00:54 by alhamdan          #+#    #+#             */
-/*   Updated: 2024/09/06 14:01:38 by alhamdan         ###   ########.fr       */
+/*   Created: 2024/09/09 21:10:10 by amashhad          #+#    #+#             */
+/*   Updated: 2025/03/01 20:21:24 by amashhad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
-	unsigned int	i;
+	size_t	i;
 
 	i = 0;
-	if (!s || !f)
+	if (!s)
+	{
+		ft_putendl_fd("(striteri error, no str)", 2);
 		return ;
-	while (s[i])
+	}
+	while (s[i] != '\0')
 	{
 		f(i, &s[i]);
 		i++;
