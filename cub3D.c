@@ -26,6 +26,28 @@ typedef struct s_map
 
 
 
+int	is_space(int c)
+{
+	if (c == ' ')
+		return (1);
+	else
+		return (0);
+}
+
+int	move_space(char *str)
+{
+	if (!str)
+		return (-1);
+	int	i;
+
+	i = 0;
+	while (is_space(str[i]))
+	{
+		i++;
+	}
+	return (i);
+}
+
 int	ft_atoi(const char *str)
 {
 	int	i;
@@ -151,6 +173,25 @@ void    fill_color_of_ciling(t_map *map, char **log)
     map->ceiling_blue = ft_atoi(log[2]);
 }
 
+// char	*skip_revers(char *line)
+// {
+// 	size_t	i;
+
+// 	i = 0;
+// 	if (line[i] == '\0' || line[i] == '\n')
+// 		return (line);
+// 	i = ft_strlen(line) - 1;
+// 	if (!is_space(line[i]))
+// 		return (line);
+// 	while (is_space(line[i]))
+// 	{
+// 		if (i == 0)
+// 			break;
+// 		i--;
+// 	}
+// 	return (rev_strchr(line, i + 1));
+// }
+
 int	skip_space(char *line)
 {
 	int	i;
@@ -158,11 +199,11 @@ int	skip_space(char *line)
 	i = 0;
 	if (!line)
 		return (-1);
-	while (!ft_isspace(line[i]))
+	while (!is_space(line[i]))
 		i++;
 	while (line[i] != '\0')
 	{
-		while (ft_isspace(line[i]))
+		while (is_space(line[i]))
 			i++;
 		if (line[i] != '\0')
 			return (i);
@@ -172,12 +213,19 @@ int	skip_space(char *line)
 
 int check_form(t_map *map, char *line)
 {
-    int error;
+    int		error;
+	int		i;
     char    **log;
 
     log = NULL;
     error = 0;
-    if (line[0] == 'N' && line[1] == 'O' && line[2] == ' ' && map->int_NO == 0 && map->out_border == 0)
+	i = 0;
+	//line = skip_revers(line);
+	if(!line)
+		return (0);
+	while (is_space(line[i]))
+		i++;
+    if (line[i] == 'N' && line[i + 1] == 'O' && line[i + 2] == ' ' && map->int_NO == 0 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
@@ -185,7 +233,7 @@ int check_form(t_map *map, char *line)
         map->int_NO = 1;
         error = 1; 
     }
-    if (line[0] == 'S' && line[1] == 'O' && line[2] == ' ' && map->int_SO == 0 && map->out_border == 0)
+    if (line[i] == 'S' && line[i + 1] == 'O' && line[i + 2] == ' ' && map->int_SO == 0 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
@@ -193,7 +241,7 @@ int check_form(t_map *map, char *line)
         map->int_SO = 1;
         error = 1; 
     }
-    if (line[0] == 'W' && line[1] == 'E' && line[2] == ' ' && map->int_WE == 0 && map->out_border == 0)
+    if (line[i] == 'W' && line[i + 1] == 'E' && line[i + 2] == ' ' && map->int_WE == 0 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
@@ -201,7 +249,7 @@ int check_form(t_map *map, char *line)
         map->int_WE = 1;
         error = 1; 
     }
-    if (line[0] == 'E' && line[1] == 'A' && line[2] == ' ' && map->int_EA == 0 && map->out_border == 0)
+    if (line[i] == 'E' && line[i + 1] == 'A' && line[i + 2] == ' ' && map->int_EA == 0 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
@@ -209,7 +257,7 @@ int check_form(t_map *map, char *line)
         map->int_EA = 1;
         error = 1; 
     }
-    if (line[0] == 'F' && line[1] == ' ' && map->floor_red == -1 && map->out_border == 0)
+    if (line[i] == 'F' && line[i + 1] == ' ' && map->floor_red == -1 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
@@ -217,32 +265,51 @@ int check_form(t_map *map, char *line)
         if (!log)
             return (1);
         if (is_number(log))
+		{
+			ft_farray(log);
             return (1);
+		}
         fill_color_of_floor(map, log);
         error = 1;
         ft_farray(log);
     }
-    if (line[0] == 'C' && line[1] == ' ' && map->ceiling_red == -1 && map->out_border == 0)
+    if (line[i] == 'C' && line[i + 1] == ' ' && map->ceiling_red == -1 && map->out_border == 0)
     {
 		if (skip_space(line) == -1)
 			return (1);
         log = ft_split(line + skip_space(line), ',');
         if (is_number(log))
+		{
+			ft_farray(log);
 			return (1);
+		}
         fill_color_of_ciling(map, log);
         error = 1; 
 		ft_farray(log);
     }
-    if (line[0] == '1' && line[ft_strlen(line) - 1] == '1')
+    if (line[i] == '1' && line[ft_strlen(line) - 1] == '1')
 	{
 		map->rows++;
 		map->out_border = 1;
         error = 1;
 	}
     if ((error == 0 && line[0] != '\0') || (error == 0 && map->out_border == 1))
+	{
+		//free(line);
         return (1);
+	}
     return (0);
 }
+
+// char	*ignore_space(char *line)
+// {
+// 	char	*str;
+// 	int		i;
+
+// 	i = 0;
+// 	str = NULL;
+
+// }
 
 void	map_read(char *file, t_map *map)
 {
@@ -261,8 +328,13 @@ void	map_read(char *file, t_map *map)
 			break ;
         if (line[ft_strlen(line) - 1] == '\n')
             line[ft_strlen(line) - 1] = '\0';
+		//ignore_space(line);
         if (check_form(map, line))
+		{
+			free(line);
             map_error(map);
+
+		}
 		free(line);
 		i++;
 	}
@@ -273,7 +345,9 @@ void	continue_save(int fd, t_map *map)
 {
 	char	*line;
 	int		i;
+	int		j;
 
+	j = 0;
 	i = 0;
 	line = NULL;
 	while (1)
@@ -283,9 +357,12 @@ void	continue_save(int fd, t_map *map)
 			break ;
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		if (line[0] == '1')
+		while (is_space(line[j]))
+			j++;
+		if (line[j] == '1')
 		{
 			map->arr_map[i] = ft_strdup(line);
+			j = 0;
 			free(line);
 			if (!map->arr_map[i])
 				map_error(map);
@@ -318,7 +395,7 @@ int	if_not_one(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] != '1')
+		if (str[i] != '1' && str[i] != ' ')
 		{
 			return (1);
 		}
@@ -327,18 +404,47 @@ int	if_not_one(char *str)
 	return (0);
 }
 
+int	direction(int c)
+{
+	if (c == 'N')
+		return (1);
+	if (c == 'S')
+		return (1);
+	if (c == 'W')
+		return (1);
+	if (c == 'E')
+		return (1);
+	return (0);
+}
+
+int	input_map(int c)
+{
+
+	if (direction(c))
+		return (1);
+	if (c == ' ')
+		return (1);
+	if (c == '1')
+		return (1);
+	if (c == '0')
+		return (1);
+	return (0);
+}
+
 void	search(char *str, t_map *map)
 {
 	int	i;
 
-	i = 0;
+	i = move_space(str);
+	if (i == -1)
+		map_error(map);
 	while (str[i] != '\0')
 	{
-		if (str[i] == 'N')
+		if (direction(str[i]))
 			map->player++;
-		if (ft_isspace(str[i]))
+		if (is_space(str[i]))
 			str[i] = '0';
-		if (str[i] != '1' && str[i] != '0' && str[i] != 'N')
+		if (!input_map(str[i]))
 			map_error(map);
 		i++;
 	}
@@ -360,6 +466,35 @@ int	many_players(t_map *map)
 		return (1);
 }
 
+// int	path_long(char **arr, t_map *map)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	k;
+
+// 	i = 1;
+// 	while (i < map->rows - 1)
+// 	{
+// 		j= 0;
+// 		while (arr[i][j] != '\0')
+// 		{
+// 			while (arr[i][j] != '1' && arr[i][j] != '\0')
+// 			{
+// 				k = 1;
+// 				while (arr[i + k][j] != '1' && i + k < map->rows)
+// 					k++;
+// 				if (i + k == map->rows)
+// 					return (1);
+// 				j++;
+// 			}
+// 			if (arr[i][j] != '\0')
+// 				j++;
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
 int	road_without_a_wall(char **arr, t_map *map)
 {
 	int	i;
@@ -368,12 +503,12 @@ int	road_without_a_wall(char **arr, t_map *map)
 	i = 1;
 	while (i < map->rows - 1)
 	{
-		j= 0;
+		j= move_space(arr[i]);
 		while (arr[i][j] != '\0')
 		{
 			while (arr[i][j] != '1')
 			{
-				if (arr[i - 1][j] == '\0' || arr[i + 1][j] == '\0')
+				if (arr[i - 1][j] == '\0' || arr[i + 1][j] == '\0' || arr[i - 1][j] == ' ' || arr[i + 1][j] == ' ')
 					return (1);
 				j++;
 			}
@@ -438,6 +573,6 @@ int	main(void)
 	// ft_printf("%s\n", map->arr_map[map->rows - 1]);
 	map_check(map);
 	ft_printarr(map->arr_map);
-	//map_error(map);
+	map_error(map);
 	return (0);
 }

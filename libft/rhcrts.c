@@ -21,26 +21,20 @@ char	*rev_strchr(char *str, int c)
 	char	*ret;
 	int		i;
 
-	i = -1;
+	i = 0;
 	if (!str)
 		return (NULL);
-	while (str[++i] != '\0')
-	{
-		if (str[i] == c)
-			break ;
-	}
-	if (str[i] == '\0')
-		return ("No int found\n");
-	ret = malloc(sizeof(char ) * (i + 1));
+	ret = malloc(sizeof(char ) * (c + 1));
 	if (!ret)
-		return ("Malloc Error\n");
-	i = -1;
-	while (str[++i] != '\0')
+		return (NULL);
+	while (str[i] != '\0')
 	{
-		if (str[i] == c)
+		if (i >= c)
 			break ;
 		ret[i] = str[i];
+		i++;
 	}
 	ret[i] = '\0';
+	free (str);
 	return (ret);
 }
