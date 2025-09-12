@@ -35,6 +35,5 @@ char	*rev_strchr(char *str, int c)
 		i++;
 	}
 	ret[i] = '\0';
-	free (str);
 	return (ret);
 }

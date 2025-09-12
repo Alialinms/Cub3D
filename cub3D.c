@@ -173,24 +173,25 @@ void    fill_color_of_ciling(t_map *map, char **log)
     map->ceiling_blue = ft_atoi(log[2]);
 }
 
-// char	*skip_revers(char *line)
-// {
-// 	size_t	i;
+char	*skip_revers(char *line)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	if (line[i] == '\0' || line[i] == '\n')
-// 		return (line);
-// 	i = ft_strlen(line) - 1;
-// 	if (!is_space(line[i]))
-// 		return (line);
-// 	while (is_space(line[i]))
-// 	{
-// 		if (i == 0)
-// 			break;
-// 		i--;
-// 	}
-// 	return (rev_strchr(line, i + 1));
-// }
+	i = 0;
+	if (line[i] == '\0' || line[i] == '\n')
+		return (line);
+	i = ft_strlen(line) - 1;
+	if (!is_space(line[i]))
+		return (line);
+	while (is_space(line[i]))
+	{
+		if (i == 0)
+			break;
+		i--;
+	}
+	line = rev_strchr(line, i + 1);
+	return (line);
+}
 
 int	skip_space(char *line)
 {
@@ -220,9 +221,9 @@ int check_form(t_map *map, char *line)
     log = NULL;
     error = 0;
 	i = 0;
-	//line = skip_revers(line);
+	line = skip_revers(line);
 	if(!line)
-		return (0);
+		return (1);
 	while (is_space(line[i]))
 		i++;
     if (line[i] == 'N' && line[i + 1] == 'O' && line[i + 2] == ' ' && map->int_NO == 0 && map->out_border == 0)
@@ -295,7 +296,7 @@ int check_form(t_map *map, char *line)
 	}
     if ((error == 0 && line[0] != '\0') || (error == 0 && map->out_border == 1))
 	{
-		//free(line);
+		free(line);
         return (1);
 	}
     return (0);
@@ -333,7 +334,6 @@ void	map_read(char *file, t_map *map)
 		{
 			free(line);
             map_error(map);
-
 		}
 		free(line);
 		i++;
@@ -495,6 +495,52 @@ int	many_players(t_map *map)
 // 	return (0);
 // }
 
+int	check_wall(char **arr, t_map *map)
+{
+	int	i;
+	int	j;
+	int	r;
+	int	c;
+	i = 0;
+	j = 1;
+	while (arr[map->rows - j][i] != '\0')
+	{
+		if (arr[map->rows - j][i] == ' ')
+		{
+			c = i;
+			j++;
+			while (arr[map->rows - j][i] != '1')
+			{
+				j++;
+			}
+			i--;
+			j--;
+			r = j;
+			while (arr[map->rows - j][i] == '1' && j != 1)
+			{
+				j--;
+			}
+			if (j == 1)
+			{
+				j = r;
+				i = c + 1;
+				while (arr[map->rows - j][i] == '1' && j != 1)
+				{
+					j--;
+				}
+				if (j != 1)
+				{
+					return (1);
+				}
+			}
+			else
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	road_without_a_wall(char **arr, t_map *map)
 {
 	int	i;
@@ -509,7 +555,7 @@ int	road_without_a_wall(char **arr, t_map *map)
 			while (arr[i][j] != '1')
 			{
 				if (arr[i - 1][j] == '\0' || arr[i + 1][j] == '\0' || arr[i - 1][j] == ' ' || arr[i + 1][j] == ' ')
-					return (1);
+					return (check_wall(arr, map));
 				j++;
 			}
 			j++;
@@ -519,9 +565,11 @@ int	road_without_a_wall(char **arr, t_map *map)
 	return (0);
 }
 
+// if_not_one(map->arr_map[0]) || if_not_one(map->arr_map[map->rows - 1]) ||
+
 void	map_check(t_map *map)
 {
-	if (if_not_one(map->arr_map[0]) || if_not_one(map->arr_map[map->rows - 1]) || many_players(map) || road_without_a_wall(map->arr_map, map))
+	if (many_players(map) || road_without_a_wall(map->arr_map, map))
 		map_error(map);
 }
 
@@ -573,6 +621,7 @@ int	main(void)
 	// ft_printf("%s\n", map->arr_map[map->rows - 1]);
 	map_check(map);
 	ft_printarr(map->arr_map);
-	map_error(map);
+	ft_printf("%i\n", map->rows);
+	//map_error(map);
 	return (0);
 }
