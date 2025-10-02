@@ -13,7 +13,7 @@ typedef struct s_map
     int         int_WE;
     int         int_EA;
 	int			rows;
-	int			cols;
+	size_t		cols;
 	int			floor_red;
     int         floor_blue;
     int         floor_green;
@@ -22,6 +22,11 @@ typedef struct s_map
     int         ceiling_green;
 	int			player;
 	int			out_border;
+	int			number_img;
+	int			index_map;
+	int			index_line;
+	int			x_player;
+	int			y_player;
 }				t_map;
 
 
@@ -123,6 +128,11 @@ void    init_map(t_map *map)
     map->cols = 0;
     map->rows = 0;
 	map->out_border = 0;
+	map->number_img = 0;
+	map->index_map = 0;
+	map->index_line = 0;
+	map->x_player = 0;
+	map->y_player = 0;
 }
 
 void    map_error(t_map *map)
@@ -212,6 +222,62 @@ int	skip_space(char *line)
 	return (-1);
 }
 
+int	char_valid_player(t_map *map, char c)
+{
+	if (c == 'N')
+	{
+		map->player++;
+		return (1);
+	}
+	if (c == 'S')
+	{
+		map->player++;
+		return (1);
+	}
+	if (c == 'W')
+	{
+		map->player++;
+		return (1);
+	}
+	if (c == 'E')
+	{
+		map->player++;
+		return (1);
+	}
+	return (0);
+}
+
+int	char_valid(t_map *map, char c)
+{
+	if (c == '1')
+		return (1);
+	if (c == '0')
+		return (1);
+	if (c == ' ')
+		return (1);
+	if (char_valid_player(map, c))
+		return (1);
+	return (0);
+}
+
+int	check_char(t_map *map, char *str)
+{
+	int	i;
+
+	i = 0;
+	while (is_space(str[i]))
+		i++;
+	if (str[i] == '\0')
+		return (0);
+	while (str[i] != '\0')
+	{
+		if (!char_valid(map, str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int check_form(t_map *map, char *line)
 {
     int		error;
@@ -232,7 +298,8 @@ int check_form(t_map *map, char *line)
 			return (1);
         map->img_NO = ft_strdup(line + skip_space(line));
         map->int_NO = 1;
-        error = 1; 
+        error = 1;
+		map->number_img++;
     }
     if (line[i] == 'S' && line[i + 1] == 'O' && line[i + 2] == ' ' && map->int_SO == 0 && map->out_border == 0)
     {
@@ -240,7 +307,8 @@ int check_form(t_map *map, char *line)
 			return (1);
         map->img_SO = ft_strdup(line + skip_space(line));
         map->int_SO = 1;
-        error = 1; 
+        error = 1;
+		map->number_img++; 
     }
     if (line[i] == 'W' && line[i + 1] == 'E' && line[i + 2] == ' ' && map->int_WE == 0 && map->out_border == 0)
     {
@@ -248,7 +316,8 @@ int check_form(t_map *map, char *line)
 			return (1);
         map->img_WE = ft_strdup(line + skip_space(line));
         map->int_WE = 1;
-        error = 1; 
+        error = 1;
+		map->number_img++; 
     }
     if (line[i] == 'E' && line[i + 1] == 'A' && line[i + 2] == ' ' && map->int_EA == 0 && map->out_border == 0)
     {
@@ -256,7 +325,8 @@ int check_form(t_map *map, char *line)
 			return (1);
         map->img_EA = ft_strdup(line + skip_space(line));
         map->int_EA = 1;
-        error = 1; 
+        error = 1;
+		map->number_img++; 
     }
     if (line[i] == 'F' && line[i + 1] == ' ' && map->floor_red == -1 && map->out_border == 0)
     {
@@ -272,6 +342,7 @@ int check_form(t_map *map, char *line)
 		}
         fill_color_of_floor(map, log);
         error = 1;
+		map->number_img++;
         ft_farray(log);
     }
     if (line[i] == 'C' && line[i + 1] == ' ' && map->ceiling_red == -1 && map->out_border == 0)
@@ -285,43 +356,37 @@ int check_form(t_map *map, char *line)
 			return (1);
 		}
         fill_color_of_ciling(map, log);
-        error = 1; 
+        error = 1;
+		map->number_img++;
 		ft_farray(log);
     }
-    if (line[i] == '1' && line[ft_strlen(line) - 1] == '1')
+    if (map->number_img == 6 && line[0] != '\0' && error == 0)
 	{
+		if (map->index_map == 0)
+			map->index_map = map->index_line;
 		map->rows++;
 		map->out_border = 1;
-        error = 1;
+		if (check_char(map, line))
+			error = 1;
+		else
+			error = 0;
 	}
     if ((error == 0 && line[0] != '\0') || (error == 0 && map->out_border == 1))
 	{
-		free(line);
+		// free(line);
         return (1);
 	}
     return (0);
 }
 
-// char	*ignore_space(char *line)
-// {
-// 	char	*str;
-// 	int		i;
-
-// 	i = 0;
-// 	str = NULL;
-
-// }
-
 void	map_read(char *file, t_map *map)
 {
-	int		i;
 	char	*line;
 	int		fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		map_error(map);
-	i = 0;
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -329,27 +394,26 @@ void	map_read(char *file, t_map *map)
 			break ;
         if (line[ft_strlen(line) - 1] == '\n')
             line[ft_strlen(line) - 1] = '\0';
-		//ignore_space(line);
         if (check_form(map, line))
 		{
 			free(line);
             map_error(map);
 		}
 		free(line);
-		i++;
+		map->index_line++;
 	}
 	close(fd);
 }
 
-void	continue_save(int fd, t_map *map)
+void	continue_save(int fd, t_map *map, char *line, int i)
 {
-	char	*line;
-	int		i;
-	int		j;
-
-	j = 0;
+	while (i < map->index_map)
+	{
+		line = get_next_line(fd);
+		free (line);
+		i++;
+	}
 	i = 0;
-	line = NULL;
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -357,34 +421,30 @@ void	continue_save(int fd, t_map *map)
 			break ;
 		if (line[ft_strlen(line) - 1] == '\n')
 			line[ft_strlen(line) - 1] = '\0';
-		while (is_space(line[j]))
-			j++;
-		if (line[j] == '1')
-		{
-			map->arr_map[i] = ft_strdup(line);
-			j = 0;
-			free(line);
-			if (!map->arr_map[i])
-				map_error(map);
-			i++;
-		}
-		else
-			free(line);
+		map->arr_map[i] = ft_strdup(line);
+		free(line);
+		if (!map->arr_map[i])
+			map_error(map);
+		i++;
 	}
 	map->arr_map[i] = NULL;
 }
 
 void	map_save(char *file, t_map *map)
 {
+	char	*line;
+	int		i;
 	int		fd;
 
+	line = NULL;
+	i = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		map_error(map);
 	map->arr_map = (char **)malloc((map->rows + 1) * sizeof(char *));
 	if (!map->arr_map)
 		map_error(map);
-	continue_save(fd, map);
+	continue_save(fd, map, line, i);
 	close(fd);
 }
 
@@ -567,10 +627,115 @@ int	road_without_a_wall(char **arr, t_map *map)
 
 // if_not_one(map->arr_map[0]) || if_not_one(map->arr_map[map->rows - 1]) ||
 
+// void	map_check(t_map *map)
+// {
+// 	if (many_players(map) || road_without_a_wall(map->arr_map, map))
+// 		map_error(map);
+// }
+int	skip_space_front(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (is_space(str[i]))
+	{
+		i++;
+	}
+	return (i);
+}
+
+int	skip_space_bake(char *str)
+{
+	size_t	i;
+
+	i = ft_strlen(str) - 1;
+	while (is_space(str[i]))
+	{
+		i--;
+	}
+	return (i);
+}
+
+void	get_cols(t_map *map)
+{
+	int	i;
+	size_t	great;
+	size_t	lower;
+
+	i = 0;
+	great = ft_strlen(map->arr_map[i]);
+	i++;
+	while (map->arr_map[i])
+	{
+		lower = ft_strlen(map->arr_map[i]);
+		if (lower > great)
+			great = lower;
+		i++;
+	}
+	map->cols = great;
+	return ;
+}
+
+void	search_player(t_map *map)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map->arr_map[i])
+	{
+		j = 0;
+		while (map->arr_map[i][j] != '\0')
+		{
+			if (char_valid_player(map, map->arr_map[i][j]))
+			{
+				map->x_player = j;
+				map->y_player = i;
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+	
+}
+
+static void	check_path(t_map *map, int i, int j)
+{
+	if (map->arr_map[i][j] == '1' || map->arr_map[i][j] == 'F')
+		return ;
+	if (map->arr_map[i][j] == ' ' || (i == map->rows - 1 && map->arr_map[i][j] == '0') || (j == skip_space_bake(map->arr_map[i]) && map->arr_map[i][j] == '0') || (i == 0  && map->arr_map[i][j] == '0')
+		|| (j == skip_space_front(map->arr_map[i]) && map->arr_map[i][j] == '0') || map->arr_map[i][j] == '\0')
+		map_error(map);
+	map->arr_map[i][j] = 'F';
+	check_path(map, i - 1, j);
+	check_path(map, i, j + 1);
+	check_path(map, i + 1, j);
+	check_path(map, i, j - 1);
+	check_path(map, i - 1, j - 1);
+	check_path(map, i + 1, j - 1);
+	check_path(map, i + 1, j + 1);
+	check_path(map, i - 1, j + 1);
+}
+
 void	map_check(t_map *map)
 {
-	if (many_players(map) || road_without_a_wall(map->arr_map, map))
+	int	i;
+
+	i = 0;
+	if (map->player > 1 || map->player == 0)
 		map_error(map);
+	search_player(map);
+	get_cols(map);
+	while (map->arr_map[i])
+	{
+		if (map->y_player == map->rows - 1 || (map->x_player == skip_space_bake(map->arr_map[i]) && i == map->y_player) || map->y_player == 0
+			|| (map->x_player == skip_space_front(map->arr_map[i]) && i == map->y_player))
+			map_error(map);
+		i++;
+	}
+	
+	check_path(map, map->y_player, map->x_player);
 }
 
 // static void	check_args(int argc, char **argv)
@@ -617,11 +782,9 @@ int	main(void)
 	map_read("test.cub", map);
     ft_printf("success\n");
 	map_save("test.cub", map);
-	// ft_printf("%s\n", map->arr_map[0]);
-	// ft_printf("%s\n", map->arr_map[map->rows - 1]);
 	map_check(map);
 	ft_printarr(map->arr_map);
-	ft_printf("%i\n", map->rows);
+	// ft_printf("%i\n", map->rows);
 	//map_error(map);
 	return (0);
 }
