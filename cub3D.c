@@ -30,7 +30,6 @@ typedef struct s_map
 }				t_map;
 
 
-
 int	is_space(int c)
 {
 	if (c == ' ')
@@ -106,7 +105,7 @@ int	is_number(char **str)
     }
 	return (0);
 }
-
+//dddddddddddddddddddddddddddddddddddddd
 void    init_map(t_map *map)
 {
     map->arr_map = NULL;
@@ -168,7 +167,7 @@ void    map_error(t_map *map)
     ft_putendl_fd("map error", 2);
     exit(1);
 }
-
+//ffffffffffffffffffffffffffffffffffffff
 void    fill_color_of_floor(t_map *map, char **log)
 {
     map->floor_red = ft_atoi(log[0]);
@@ -221,7 +220,7 @@ int	skip_space(char *line)
 	}
 	return (-1);
 }
-
+//ffffffffffffffffffffffffffffffffffffffff
 int	char_valid_player(t_map *map, char c)
 {
 	if (c == 'N')
@@ -378,7 +377,7 @@ int check_form(t_map *map, char *line)
 	}
     return (0);
 }
-
+//dddddddddddddddddddddddddddddddddddddddd
 void	map_read(char *file, t_map *map)
 {
 	char	*line;
@@ -448,48 +447,6 @@ void	map_save(char *file, t_map *map)
 	close(fd);
 }
 
-int	if_not_one(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] != '1' && str[i] != ' ')
-		{
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	direction(int c)
-{
-	if (c == 'N')
-		return (1);
-	if (c == 'S')
-		return (1);
-	if (c == 'W')
-		return (1);
-	if (c == 'E')
-		return (1);
-	return (0);
-}
-
-int	input_map(int c)
-{
-
-	if (direction(c))
-		return (1);
-	if (c == ' ')
-		return (1);
-	if (c == '1')
-		return (1);
-	if (c == '0')
-		return (1);
-	return (0);
-}
 
 void	search(char *str, t_map *map)
 {
@@ -525,113 +482,7 @@ int	many_players(t_map *map)
 	else
 		return (1);
 }
-
-// int	path_long(char **arr, t_map *map)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	k;
-
-// 	i = 1;
-// 	while (i < map->rows - 1)
-// 	{
-// 		j= 0;
-// 		while (arr[i][j] != '\0')
-// 		{
-// 			while (arr[i][j] != '1' && arr[i][j] != '\0')
-// 			{
-// 				k = 1;
-// 				while (arr[i + k][j] != '1' && i + k < map->rows)
-// 					k++;
-// 				if (i + k == map->rows)
-// 					return (1);
-// 				j++;
-// 			}
-// 			if (arr[i][j] != '\0')
-// 				j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-int	check_wall(char **arr, t_map *map)
-{
-	int	i;
-	int	j;
-	int	r;
-	int	c;
-	i = 0;
-	j = 1;
-	while (arr[map->rows - j][i] != '\0')
-	{
-		if (arr[map->rows - j][i] == ' ')
-		{
-			c = i;
-			j++;
-			while (arr[map->rows - j][i] != '1')
-			{
-				j++;
-			}
-			i--;
-			j--;
-			r = j;
-			while (arr[map->rows - j][i] == '1' && j != 1)
-			{
-				j--;
-			}
-			if (j == 1)
-			{
-				j = r;
-				i = c + 1;
-				while (arr[map->rows - j][i] == '1' && j != 1)
-				{
-					j--;
-				}
-				if (j != 1)
-				{
-					return (1);
-				}
-			}
-			else
-				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	road_without_a_wall(char **arr, t_map *map)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (i < map->rows - 1)
-	{
-		j= move_space(arr[i]);
-		while (arr[i][j] != '\0')
-		{
-			while (arr[i][j] != '1')
-			{
-				if (arr[i - 1][j] == '\0' || arr[i + 1][j] == '\0' || arr[i - 1][j] == ' ' || arr[i + 1][j] == ' ')
-					return (check_wall(arr, map));
-				j++;
-			}
-			j++;
-		}
-		i++;
-	}
-	return (0);
-}
-
-// if_not_one(map->arr_map[0]) || if_not_one(map->arr_map[map->rows - 1]) ||
-
-// void	map_check(t_map *map)
-// {
-// 	if (many_players(map) || road_without_a_wall(map->arr_map, map))
-// 		map_error(map);
-// }
+//ddddddddddddddddddddddddddddddddddddd
 int	skip_space_front(char *str)
 {
 	int	i;
@@ -655,7 +506,7 @@ int	skip_space_bake(char *str)
 	}
 	return (i);
 }
-
+//ddddddddddddddddddddddddddddddddddddddd
 void	get_cols(t_map *map)
 {
 	int	i;
