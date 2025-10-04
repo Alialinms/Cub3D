@@ -6,12 +6,11 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:37:04 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/02 21:53:53 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 04:14:56 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
-
 int	char_valid_player(t_map *map, char c)
 {
 	if (c == 'N')
@@ -36,7 +35,6 @@ int	char_valid_player(t_map *map, char c)
 	}
 	return (0);
 }
-
 int	char_valid(t_map *map, char c)
 {
 	if (c == '1')
@@ -49,7 +47,6 @@ int	char_valid(t_map *map, char c)
 		return (1);
 	return (0);
 }
-
 int	check_char(t_map *map, char *str)
 {
 	int	i;
@@ -67,7 +64,6 @@ int	check_char(t_map *map, char *str)
 	}
 	return (1);
 }
-
 int	skip_space_front(char *str)
 {
 	int	i;
@@ -79,7 +75,6 @@ int	skip_space_front(char *str)
 	}
 	return (i);
 }
-
 int	skip_space_bake(char *str)
 {
 	size_t	i;

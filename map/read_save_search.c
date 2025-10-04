@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:41:01 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/02 22:18:39 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 01:42:08 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	map_read(char *file, t_map *map)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		map_error(map);
+		map_error(map, 1);
 	while (1)
 	{
 		line = get_next_line(fd);
@@ -30,7 +30,7 @@ void	map_read(char *file, t_map *map)
         if (check_form(map, line))
 		{
 			free(line);
-            map_error(map);
+            map_error(map, 1);
 		}
 		free(line);
 		map->index_line++;
@@ -57,7 +57,7 @@ void	continue_save(int fd, t_map *map, char *line, int i)
 		map->arr_map[i] = ft_strdup(line);
 		free(line);
 		if (!map->arr_map[i])
-			map_error(map);
+			map_error(map, 1);
 		i++;
 	}
 	map->arr_map[i] = NULL;
@@ -73,10 +73,10 @@ void	map_save(char *file, t_map *map)
 	i = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		map_error(map);
+		map_error(map, 1);
 	map->arr_map = (char **)malloc((map->rows + 1) * sizeof(char *));
 	if (!map->arr_map)
-		map_error(map);
+		map_error(map, 1);
 	continue_save(fd, map, line, i);
 	close(fd);
 }

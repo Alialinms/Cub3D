@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_and_errer.c                                   :+:      :+:    :+:   */
+/*   init_and_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:33:11 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/02 21:54:17 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 03:51:50 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
-
 void    init_map(t_map *map)
 {
     map->arr_map = NULL;
@@ -39,8 +38,25 @@ void    init_map(t_map *map)
 	map->x_player = 0;
 	map->y_player = 0;
 }
-
-void    map_error(t_map *map)
+void    map_error_2(t_map *map)
+{
+    if (map->img_SO)
+    {
+        free (map->img_SO);
+        map->img_SO = NULL;
+    }
+    if (map->img_WE)
+    {
+        free (map->img_WE);
+        map->img_WE = NULL;
+    }
+    if (map->img_EA)
+    {
+        free (map->img_EA);
+        map->img_EA = NULL;
+    }
+}
+void    map_error(t_map *map, int error)
 {
     if (map)
     {
@@ -53,23 +69,10 @@ void    map_error(t_map *map)
             free (map->img_NO);
             map->img_NO = NULL;
         }
-        if (map->img_SO)
-        {
-            free (map->img_SO);
-            map->img_SO = NULL;
-        }
-        if (map->img_WE)
-        {
-            free (map->img_WE);
-            map->img_WE = NULL;
-        }
-        if (map->img_EA)
-        {
-            free (map->img_EA);
-            map->img_EA = NULL;
-        }
+        map_error_2(map);
         free (map);
     }
     ft_putendl_fd("map error", 2);
-    exit(1);
+    if (error)
+        exit(-1);
 }

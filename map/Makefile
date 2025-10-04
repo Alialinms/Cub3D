@@ -6,7 +6,7 @@
 #    By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/27 19:46:51 by alhamdan          #+#    #+#              #
-#    Updated: 2025/10/02 22:31:01 by alhamdan         ###   ########.fr        #
+#    Updated: 2025/10/04 02:19:26 by alhamdan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 NAME = cub
 
-SRC = char_and_second_skip check_form color_and_first_skip init_and_error main_map player_cols read_save_search uitil
+SRC = char_and_second_skip check_form check_form_2 color_and_first_skip init_and_error main_map player_cols read_save_search uitil
 
 OBJ_DIR = obj
 

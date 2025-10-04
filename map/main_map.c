@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:58:10 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/02 21:58:21 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 04:10:43 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	check_path(t_map *map, int i, int j)
 		return ;
 	if (map->arr_map[i][j] == ' ' || (i == map->rows - 1 && map->arr_map[i][j] == '0') || (j == skip_space_bake(map->arr_map[i]) && map->arr_map[i][j] == '0') || (i == 0  && map->arr_map[i][j] == '0')
 		|| (j == skip_space_front(map->arr_map[i]) && map->arr_map[i][j] == '0') || map->arr_map[i][j] == '\0')
-		map_error(map);
+		map_error(map, 1);
 	map->arr_map[i][j] = 'F';
 	check_path(map, i - 1, j);
 	check_path(map, i, j + 1);
@@ -36,14 +36,14 @@ void	map_check(t_map *map)
 
 	i = 0;
 	if (map->player > 1 || map->player == 0)
-		map_error(map);
+		map_error(map, 1);
 	search_player(map);
 	get_cols(map);
 	while (map->arr_map[i])
 	{
 		if (map->y_player == map->rows - 1 || (map->x_player == skip_space_bake(map->arr_map[i]) && i == map->y_player) || map->y_player == 0
 			|| (map->x_player == skip_space_front(map->arr_map[i]) && i == map->y_player))
-			map_error(map);
+			map_error(map, 1);
 		i++;
 	}
 	
@@ -92,11 +92,21 @@ int	main(void)
 	// check_args(argc, argv);
 	init_map(map);
 	map_read("test.cub", map);
+	
+	ft_printf("%s\n", map->img_NO);
+	ft_printf("%s\n", map->img_SO);
+	ft_printf("%s\n", map->img_EA);
+	ft_printf("%s\n", map->img_WE);
+	ft_printf("%i\n", map->ceiling_red);
+	ft_printf("%i\n", map->ceiling_green);
+	ft_printf("%i\n", map->ceiling_blue);
+	ft_printf("%i\n", map->floor_red);
+	ft_printf("%i\n", map->floor_green);
+	ft_printf("%i\n", map->floor_blue);
     ft_printf("success\n");
 	map_save("test.cub", map);
 	map_check(map);
 	ft_printarr(map->arr_map);
-	// ft_printf("%i\n", map->rows);
-	//map_error(map);
+	// map_error(map, 0);
 	return (0);
 }

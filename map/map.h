@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:43:35 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/02 22:18:34 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 04:09:25 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void    fill_color_of_ciling(t_map *map, char **log);
 char	*skip_revers(char *line);
 int		skip_space(char *line);
 void    init_map(t_map *map);
-void    map_error(t_map *map);
+void    map_error(t_map *map, int error);
 void	get_cols(t_map *map);
 void	search_player(t_map *map);
 void	map_read(char *file, t_map *map);
@@ -67,4 +67,7 @@ int		move_space(char *str);
 int		ft_atoi(const char *str);
 int		is_digit(char	*str);
 int		is_number(char **str);
+int     check_form_6(t_map *map, char *line, int *error);
+int     check_form_2_compl(t_map *map, char *line, int **i, int **error);
+int     check_form_3_compl(t_map *map, char *line, int **i, int **error);
 #endif
