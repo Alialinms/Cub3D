@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:33:11 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/04 03:51:50 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 05:07:31 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void    map_error(t_map *map, int error)
     {
         if (map->arr_map)
         {
-           ft_farray(map->arr_map);
+            ft_farray(map->arr_map);
         }
         if (map->img_NO)
         {
@@ -72,7 +72,9 @@ void    map_error(t_map *map, int error)
         map_error_2(map);
         free (map);
     }
-    ft_putendl_fd("map error", 2);
     if (error)
+    {
+        ft_putendl_fd("map error", 2);
         exit(-1);
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:58:10 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/04 04:10:43 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 04:23:11 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,6 @@ int	main(void)
 	map_save("test.cub", map);
 	map_check(map);
 	ft_printarr(map->arr_map);
-	// map_error(map, 0);
+	map_error(map, 0);
 	return (0);
 }

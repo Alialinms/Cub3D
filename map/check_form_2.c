@@ -6,7 +6,7 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 02:15:46 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/04 04:09:02 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 05:19:40 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int  check_form_6(t_map *map, char *line, int *error)
 	}
     if ((*error == 0 && line[0] != '\0') || (*error == 0 && map->out_border == 1))
 	{
-		// free(line);
         return (1);
 	}
     return (0);

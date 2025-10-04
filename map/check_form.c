@@ -6,12 +6,11 @@
 /*   By: alhamdan <alhamdan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 21:39:38 by alhamdan          #+#    #+#             */
-/*   Updated: 2025/10/04 04:06:40 by alhamdan         ###   ########.fr       */
+/*   Updated: 2025/10/04 05:31:30 by alhamdan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
-// »»-----► Number of lines: 15
 static int  check_form_2(t_map *map, char *line, int *i, int *error)
 {
     if (line[*i] == 'S' && line[*i + 1] == 'O' && line[*i + 2] == ' ' && map->int_SO == 0 && map->out_border == 0)
@@ -30,7 +29,6 @@ static int  check_form_2(t_map *map, char *line, int *i, int *error)
         return (1);
     return (0);
 }
-// »»-----► Number of lines: 15
 static int  check_form_3(t_map *map, char *line, int *i, int *error)
 {
     if (line[*i] == 'N' && line[*i + 1] == 'O' && line[*i + 2] == ' ' && map->int_NO == 0 && map->out_border == 0)
@@ -49,7 +47,6 @@ static int  check_form_3(t_map *map, char *line, int *i, int *error)
         return (1);
     return (0);
 }
-// »»-----► Number of lines: 24
 static int  check_form_4(t_map *map, char *line, int *i, int *error)
 {
     char    **log;
@@ -77,7 +74,6 @@ static int  check_form_4(t_map *map, char *line, int *i, int *error)
     }
     return (0);
 }
-// »»-----► Number of lines: 22
 static int  check_form_5(t_map *map, char *line, int *i, int *error)
 {
     char    **log;
@@ -103,7 +99,6 @@ static int  check_form_5(t_map *map, char *line, int *i, int *error)
     }
     return (0);
 }
-// »»-----► Number of lines: 21
 int check_form(t_map *map, char *line)
 {
     int		error;
